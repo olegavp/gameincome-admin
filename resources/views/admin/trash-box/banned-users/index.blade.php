@@ -58,7 +58,7 @@
                             <i class="fas fa-arrow-up">
                             </i>
                         </a>
-                        <form action="{{ Route('trashBoxBannedUserRestoreMethod', ['id' => $user->id]) }}" method="POST"
+                        <form action="{{ Route('trashBoxBannedUserRestore', ['id' => $user->id]) }}" method="POST"
                               style="display: inline-block" >
                             @csrf
                             @method('POST')

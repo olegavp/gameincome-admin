@@ -1,6 +1,6 @@
-@extends('layouts.admin_layout')
+@extends('layouts/admin_layout')
 
-@section('title', 'Удалённые новостные комментарии')
+@section('title', 'Обзоры')
 
 @section('content')
     @if (session('success'))
@@ -18,68 +18,72 @@
                     #
                 </th>
                 <th style="width: 20%">
-                    Никнейм пользователя
+                    Название
                 </th>
                 <th style="width: 30%">
-                    Почта пользователя
+                    Количество комментариев
+                </th>
+                <th style="width: 10%">
+                    Автор
                 </th>
                 <th>
                     Дата публикации
-                </th>
-                <th>
-                    Дата удаления
                 </th>
                 <th style="width: 20%">
                 </th>
             </tr>
             </thead>
-            <tbody>
-            @foreach($comments as $comment)
+            @foreach($reviews as $review)
+                <tbody>
                 <tr>
                     <td>
                         #
                     </td>
                     <td>
                         <a>
-                            {{ $comment->user->nickname }}
+                            {{ $review->name }}
                         </a>
                     </td>
                     <td>
-                        {{ $comment->user->email }}
+                        {{ \App\Models\AdminPanel\Review\ReviewComment::query()->where('review_id', $review->id)->count() }}
                     </td>
                     <td class="project_progress">
-                        {{ $comment->created_at }}
+                        {{ $review->writer->full_name }}
                     </td>
                     <td class="project_progress">
-                        {{ $comment->deleted_at }}
+                        {{ $review->created_at }}
                     </td>
                     <td class="project-actions text-right">
-                        <a class="btn btn-primary btn-sm"
-                           href="{{ Route('trashBoxNewsCommentsToPage', ['id' => $comment->id]) }}">
+                        <a class="btn btn-primary btn-sm" href="{{ Route('showReview', ['review' => $review->id]) }}">
                             <i class="fas fa-arrow-up">
                             </i>
                         </a>
-                        <form action="{{ Route('trashBoxNewsCommentRestore', ['id' => $comment->id]) }}" method="POST"
-                              style="display: inline-block">
+                        <a class="btn btn-info btn-sm" href="{{ Route('editReviewPage', ['review' => $review->id]) }}">
+                            <i class="fas fa-pencil-alt">
+                            </i>
+                        </a>
+                        <form action="{{ Route('deleteReview', ['review' => $review->id]) }}" method="POST"
+                              style="display: inline-block" >
                             @csrf
-                            @method('POST')
-                            <button class="btn btn-success btn-sm">
-                                <i class="fas fa-undo">
+                            @method('DELETE')
+                            <button class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash">
                                 </i>
                             </button>
                         </form>
                     </td>
                 </tr>
+                </tbody>
             @endforeach
-            </tbody>
         </table>
     </div>
     <div class="mt-3 ml-3">
-        {{$comments->links()}}
+        {{$reviews->links()}}
     </div>
 
     <style>
-        nav div div {
+        nav div div
+        {
             display: none;
         }
     </style>

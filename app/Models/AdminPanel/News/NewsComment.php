@@ -16,12 +16,11 @@ class NewsComment extends Model
 
     public function news(): BelongsTo
     {
-        return $this->belongsTo(News::class, 'id')->withTrashed();
+        return $this->belongsTo(News::class, 'news_id', 'id')->withTrashed();
     }
-
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

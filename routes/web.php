@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\Employees\DeleteEmployeeController;
 use App\Http\Controllers\Admin\Employees\EditEmployeesController;
 use App\Http\Controllers\Admin\Employees\GetEmployeesController;
 use App\Http\Controllers\Admin\Employees\RegistrationEmployeeController;
+use App\Http\Controllers\Admin\Review\ReviewController;
 use App\Http\Controllers\Admin\User\GetUsersController;
 use App\Http\Controllers\Admin\User\UserInfoController;
 use App\Http\Controllers\Admin\MainPage\CategoriesController;
@@ -38,6 +39,7 @@ use App\Http\Controllers\Admin\Product\PlatformsController;
 use App\Http\Controllers\Admin\Product\ServicesController;
 use App\Http\Controllers\Admin\PromoCode\PromoCodeController;
 use App\Http\Controllers\Admin\Trash\TrashController;
+use App\Http\Controllers\Admin\Review\TrashController as TrashReviewController;
 use App\Http\Controllers\Admin\User\ProhibitionsController;
 use App\Models\AdminPanel\Product\ItemToPlatform;
 use App\Models\AdminPanel\Product\ItemToService;
@@ -69,7 +71,21 @@ Route::prefix('admin-panel')->group(function () {
             Route::post('/edit/small/{news}', [NewsController::class, 'editSmallNews'])->name('editSmallNews');
             Route::post('/edit/big/{news}', [NewsController::class, 'editBigNews'])->name('editBigNews');
             Route::delete('/delete/news/{news}', [NewsController::class, 'deleteNews'])->name('deleteNews');
-            Route::delete('/delete/comment/{newsComment}', [NewsController::class, 'deleteComment'])->name('deleteComment');
+            Route::delete('/delete/comment/{newsComment}', [NewsController::class, 'deleteNewsComment'])->name('deleteNewsComment');
+        });
+    });
+
+    Route::group(['middleware' => ['role:Администратор|Писатель обзоров|Модератор']], function () {
+        Route::prefix('/reviews')->group(function () {
+            Route::get('/', [ReviewController::class, 'reviewsPage'])->name('reviewsPage');
+            Route::get('/all', [ReviewController::class, 'allReviewsPage'])->name('allReviewsPage');
+            Route::get('/create', [ReviewController::class, 'createReviewPage'])->name('createReviewPage');
+            Route::post('/create', [ReviewController::class, 'createReview'])->name('createReview');
+            Route::get('/{review}', [ReviewController::class, 'showReview'])->name('showReview');
+            Route::get('/edit/{review}', [ReviewController::class, 'editReviewPage'])->name('editReviewPage');
+            Route::post('/edit/{review}', [ReviewController::class, 'editReview'])->name('editReview');
+            Route::delete('/delete/reviews/{review}', [ReviewController::class, 'deleteReview'])->name('deleteReview');
+            Route::delete('/delete/comment/{comment}', [ReviewController::class, 'deleteReviewComment'])->name('deleteReviewComment');
         });
     });
 
@@ -325,6 +341,9 @@ Route::prefix('admin-panel')->group(function () {
                     Route::get('/', [TrashController::class, 'commentsList'])->name('trashBoxNewsCommentsPage');
                     Route::get('/{id}', [TrashController::class, 'toComment'])->name('trashBoxNewsCommentsToPage');
                 });
+                Route::prefix('reviews-comments')->group(function () {
+                    Route::get('/', [TrashReviewController::class, 'commentsList'])->name('trashBoxReviewsCommentsPage');
+                });
                 Route::prefix('promo-codes')->group(function () {
                     Route::get('/', [TrashController::class, 'promoCodesList'])->name('trashBoxPromoCodesPage');
                 });
@@ -335,16 +354,19 @@ Route::prefix('admin-panel')->group(function () {
 
             Route::prefix('methods')->group(function () {
                 Route::prefix('news')->group(function () {
-                    Route::post('/restore/{id}', [TrashController::class, 'restoreNews'])->name('trashBoxNewsRestoreMethod');
+                    Route::post('/restore/{id}', [TrashController::class, 'restoreNews'])->name('trashBoxNewsRestore');
                 });
                 Route::prefix('news-comments')->group(function () {
-                    Route::post('/restore/{id}', [TrashController::class, 'restoreComment'])->name('trashBoxNewsCommentRestoreMethod');
+                    Route::post('/restore/{id}', [TrashController::class, 'restoreComment'])->name('trashBoxNewsCommentRestore');
                 });
                 Route::prefix('promo-codes')->group(function () {
-                    Route::post('/restore/{id}', [TrashController::class, 'restorePromoCode'])->name('trashBoxPromoCodeRestoreMethod');
+                    Route::post('/restore/{id}', [TrashController::class, 'restorePromoCode'])->name('trashBoxPromoCodeRestore');
                 });
                 Route::prefix('user-banned')->group(function () {
-                    Route::post('/restore/{id}', [TrashController::class, 'unbanUser'])->name('trashBoxBannedUserRestoreMethod');
+                    Route::post('/restore/{id}', [TrashController::class, 'unbanUser'])->name('trashBoxBannedUserRestore');
+                });
+                Route::prefix('review-comments')->group(function () {
+                    Route::post('/restore/{id}', [TrashReviewController::class, 'restoreComment'])->name('trashBoxReviewCommentRestore');
                 });
             });
         });

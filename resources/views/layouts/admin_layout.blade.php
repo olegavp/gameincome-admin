@@ -113,7 +113,7 @@
                                     @endif
                                     @if($role == 'Администратор' or $role == 'Модератор' or $role == 'Писатель обзоров')
                                         <li class="nav-item">
-                                            <a href="{{ route('newsPage') }}" class="nav-link">
+                                            <a href="{{ route('reviewsPage') }}" class="nav-link">
                                                 <p>Обзоры</p>
                                             </a>
                                         </li>

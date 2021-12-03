@@ -36,7 +36,7 @@
                                 @endif
 
                                 <td>
-                                    <form action="{{ Route('trashBoxPromoCodeRestoreMethod', ['id' => $promoCode->id ]) }}" method="POST"
+                                    <form action="{{ Route('trashBoxPromoCodeRestore', ['id' => $promoCode->id ]) }}" method="POST"
                                           style="display: inline-block">
                                         @csrf
                                         @method('POST')

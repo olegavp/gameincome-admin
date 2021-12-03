@@ -5,10 +5,6 @@ namespace App\Http\Controllers\Admin\News;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminPanel\News\CreateNewsRequest;
 use App\Http\Requests\AdminPanel\News\EditNewsRequest;
-use App\Http\Resources\AdminPanel\News\AllNewsResource;
-use App\Http\Resources\AdminPanel\News\NewsCommentResource;
-use App\Http\Resources\AdminPanel\News\NewsResource;
-use App\Http\Resources\AdminPanel\News\ShortNewsResource;
 use App\Models\AdminPanel\News\News;
 use App\Models\AdminPanel\News\NewsComment;
 use App\Services\AdminPanel\News\NewsService;
@@ -16,8 +12,6 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\DB;
 
 class NewsController extends Controller
 {
@@ -211,7 +205,7 @@ class NewsController extends Controller
     }
 
 
-    public function deleteComment(NewsComment $newsComment)
+    public function deleteNewsComment(NewsComment $newsComment)
     {
         try
         {

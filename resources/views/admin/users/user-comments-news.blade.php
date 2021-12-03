@@ -55,7 +55,7 @@
                             @endif
 
                             @if($comment->deleted_at == null)
-                                <form action="{{ Route('deleteComment', ['newsComment' => $comment->id]) }}" method="POST">
+                                <form action="{{ Route('deleteNewsComment', ['newsComment' => $comment->id]) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-danger btn-sm">

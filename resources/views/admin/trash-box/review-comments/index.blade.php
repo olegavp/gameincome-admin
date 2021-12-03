@@ -1,6 +1,6 @@
 @extends('layouts.admin_layout')
 
-@section('title', 'Удалённые новостные комментарии')
+@section('title', 'Удалённые комментарии к обзорам')
 
 @section('content')
     @if (session('success'))
@@ -54,13 +54,12 @@
                         {{ $comment->deleted_at }}
                     </td>
                     <td class="project-actions text-right">
-                        <a class="btn btn-primary btn-sm"
-                           href="{{ Route('trashBoxNewsCommentsToPage', ['id' => $comment->id]) }}">
+                        <a class="btn btn-primary btn-sm" href="{{ Route('showReview', ['review' => $comment->review_id]) }}">
                             <i class="fas fa-arrow-up">
                             </i>
                         </a>
-                        <form action="{{ Route('trashBoxNewsCommentRestore', ['id' => $comment->id]) }}" method="POST"
-                              style="display: inline-block">
+                        <form action="{{ Route('trashBoxReviewCommentRestore', ['id' => $comment->id]) }}" method="POST"
+                              style="display: inline-block" >
                             @csrf
                             @method('POST')
                             <button class="btn btn-success btn-sm">
@@ -79,7 +78,8 @@
     </div>
 
     <style>
-        nav div div {
+        nav div div
+        {
             display: none;
         }
     </style>

@@ -58,7 +58,7 @@
                                 <i class="fas fa-arrow-up">
                                 </i>
                             </a>
-                            <form action="{{ Route('trashBoxNewsRestoreMethod', ['id' => $post->id]) }}" method="POST"
+                            <form action="{{ Route('trashBoxNewsRestore', ['id' => $post->id]) }}" method="POST"
                                   style="display: inline-block" >
                                 @csrf
                                 @method('POST')
