@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Review;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminPanel\Review\CreateReviewRequest;
 use App\Http\Requests\AdminPanel\Review\EditReviewRequest;
+use App\Models\AdminPanel\Review\Enums\ItemTypeEnum;
 use App\Models\AdminPanel\Review\Review;
 use App\Models\AdminPanel\Review\ReviewComment;
 use App\Services\AdminPanel\Reviews\ReviewsService;
@@ -13,6 +14,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
@@ -112,12 +114,12 @@ class ReviewController extends Controller
         }
     }
 
-    public function deleteReview($review): RedirectResponse|JsonResponse
+    public function deleteReview(Review $review): RedirectResponse|JsonResponse
     {
         try {
             $response = $this->reviewsService->deleteReview($review);
 
-            if (isset($response->additional) && $response->additional['status'] === 200) {
+            if ($response['status'] === 200) {
                 return redirect()->back()
                     ->withSuccess('Вы успешно удалили обзор! Если вы хотите восстановить его, то воспользуйтесь корзиной.');
             } else {
@@ -153,5 +155,29 @@ class ReviewController extends Controller
                 'status' => 400,
             ], 400);
         }
+    }
+
+    public function getItemsAjax(Request $request)
+    {
+        $itemType = $request->get('type');
+        $q = $request->get('q');
+
+        if (!$itemType) {
+            return null;
+        } else {
+            $data = ItemTypeEnum::getQuery($itemType);
+
+            if ($data) {
+                $data = $data
+                    ->select(['id', 'name as text'])
+                    ->where('name', 'LIKE', "%$q%")
+                    ->get();
+            } else {
+                $data = [];
+            }
+
+            return response()->json($data);
+        }
+
     }
 }

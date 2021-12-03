@@ -59,11 +59,11 @@ class Review extends Model
     public function getItemAttribute(): ?Model
     {
         if ($this->item_type === ItemTypeEnum::ITEM_GAME) {
-            return Game::query()->find($this->item_id)->first();
+            return Game::query()->where('id', $this->item_id)->first();
         } elseif ($this->item_type === ItemTypeEnum::ITEM_SOFTWARE) {
-            return Software::query()->find($this->item_id)->first();
+            return Software::query()->where('id', $this->item_id)->first();
         } elseif ($this->item_type === ItemTypeEnum::ITEM_SKIN) {
-            return Skin::query()->find($this->item_id)->first();
+            return Skin::query()->where('id', $this->item_id)->first();
         } else {
             return null;
         }

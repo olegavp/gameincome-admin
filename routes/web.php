@@ -86,6 +86,7 @@ Route::prefix('admin-panel')->group(function () {
             Route::post('/edit/{review}', [ReviewController::class, 'editReview'])->name('editReview');
             Route::delete('/delete/reviews/{review}', [ReviewController::class, 'deleteReview'])->name('deleteReview');
             Route::delete('/delete/comment/{comment}', [ReviewController::class, 'deleteReviewComment'])->name('deleteReviewComment');
+            Route::get('ajax/get-items', [ReviewController::class, 'getItemsAjax'])->name('getReviewsAjax');
         });
     });
 

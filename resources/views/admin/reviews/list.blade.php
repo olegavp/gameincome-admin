@@ -10,6 +10,17 @@
         </div>
     @endif
 
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible my-2">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <ul class="mt-3 list-disc list-inside text-sm">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="card-body p-0">
         <table class="table table-striped projects">
             <thead>
@@ -40,9 +51,7 @@
                         #
                     </td>
                     <td>
-                        <a>
-                            {{ $review->name }}
-                        </a>
+                        {{ $review->name }}
                     </td>
                     <td>
                         {{ \App\Models\AdminPanel\Review\ReviewComment::query()->where('review_id', $review->id)->count() }}
@@ -63,7 +72,7 @@
                             </i>
                         </a>
                         <form action="{{ Route('deleteReview', ['review' => $review->id]) }}" method="POST"
-                              style="display: inline-block" >
+                              style="display: inline-block">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-danger btn-sm">
@@ -82,8 +91,7 @@
     </div>
 
     <style>
-        nav div div
-        {
+        nav div div {
             display: none;
         }
     </style>
